@@ -13,6 +13,28 @@ You can also find other distributions there.
 
 # Instructions
 
+## Installation
+
+You need to have Python 3.6 or higher installed.
+It is recommended that you use a virtual environment:
+```
+sudo pip3 install -U virtualenv
+virtualenv --system-site-packages -p python3 ./my_venv
+source ./my_venv/bin/activate
+```
+
+Then, install all required Python packages using:
+```
+pip install -r requirements.txt
+```
+
+Finally, clone the repository:
+
+```
+git clone https://github.com/joeynmt/joeynmt.git
+```
+
+
 ## Multi-aspect Sentiment Analysis (Beer Advocate)
 See [beer](latent_rationale/beer) directory.
 
