@@ -3,7 +3,6 @@ from torch import nn
 from torch.nn import LSTMCell
 import numpy as np
 from latent_rationale.nn.kuma_gate import KumaGate
-from latent_rationale.nn.gumbel_gate import GumbelGate
 from latent_rationale.common.util import get_encoder
 from latent_rationale.nn.rcnn import RCNNCell
 
@@ -34,8 +33,6 @@ class IndependentLatentModel(nn.Module):
 
         if distribution == "kuma":
             self.z_layer = KumaGate(enc_size)
-        elif distribution == "gumbel":
-            self.z_layer = GumbelGate(enc_size)
         else:
             raise ValueError("unknown distribution")
 
