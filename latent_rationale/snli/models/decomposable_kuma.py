@@ -70,8 +70,6 @@ class KumaDecompAttModel(nn.Module):
         self.lagrange_lr = cfg.lagrange_lr
         self.lagrange_alpha = cfg.lagrange_alpha
         self.lambda_init = cfg.lambda_init
-        self.lambda_min = cfg.lambda_min
-        self.lambda_max = cfg.lambda_max
         self.register_buffer('lambda0', torch.full((1,), self.lambda_init))
         self.register_buffer('c0_ma', torch.full((1,), 0.))  # moving average
 
@@ -317,7 +315,6 @@ class KumaDecompAttModel(nn.Module):
             # update lambda
             self.lambda0 = self.lambda0 * torch.exp(
                 self.lagrange_lr * c0.detach())
-            self.lambda0 = self.lambda0.clamp(self.lambda_min, self.lambda_max)
 
             with torch.no_grad():
                 optional["cost0_l0"] = l0.item()

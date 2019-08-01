@@ -2,11 +2,11 @@
 
 import torch
 from torch import nn
-from torch.nn.functional import softplus, sigmoid
 
 from latent_rationale.common.util import get_z_stats
 from latent_rationale.common.classifier import Classifier
-from latent_rationale.common.latent import DependentLatentModel, IndependentLatentModel
+from latent_rationale.common.latent import \
+    DependentLatentModel, IndependentLatentModel
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -38,11 +38,9 @@ class LatentRationaleModel(nn.Module):
                  z_rnn_size:     int = 30,
                  selection:      float = 1.0,
                  lasso:          float = 0.0,
-                 lambda_init:    float = 1e-3,
-                 lambda_min:     float = 1e-9,
-                 lambda_max:     float = 5.,
-                 lagrange_lr:    float = 0.05,
-                 lagrange_alpha: float = 0.9,
+                 lambda_init:    float = 1e-4,
+                 lagrange_lr:    float = 0.01,
+                 lagrange_alpha: float = 0.99,
                  ):
 
         super(LatentRationaleModel, self).__init__()
@@ -78,8 +76,6 @@ class LatentRationaleModel(nn.Module):
         # lagrange
         self.lagrange_alpha = lagrange_alpha
         self.lagrange_lr = lagrange_lr
-        self.lambda_min = lambda_min
-        self.lambda_max = lambda_max
         self.register_buffer('lambda0', torch.full((1,), lambda_init))
         self.register_buffer('lambda1', torch.full((1,), lambda_init))
         self.register_buffer('c0_ma', torch.full((1,), 0.))  # moving average
@@ -170,7 +166,6 @@ class LatentRationaleModel(nn.Module):
 
         # update lambda
         self.lambda0 = self.lambda0 * torch.exp(self.lagrange_lr * c0.detach())
-        self.lambda0 = self.lambda0.clamp(self.lambda_min, self.lambda_max)
 
         with torch.no_grad():
             optional["cost0_l0"] = l0.item()
@@ -217,7 +212,6 @@ class LatentRationaleModel(nn.Module):
             # update lambda
             self.lambda1 = self.lambda1 * torch.exp(
                 self.lagrange_lr * c1.detach())
-            self.lambda1 = self.lambda1.clamp(self.lambda_min, self.lambda_max)
 
             with torch.no_grad():
                 optional["cost1_lasso"] = lasso_cost.item()

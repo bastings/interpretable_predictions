@@ -334,10 +334,6 @@ def get_args():
                         help="alpha for computing the running average")
     parser.add_argument('--lambda_init', type=float, default=1e-4,
                         help="initial value for lambda")
-    parser.add_argument('--lambda_min', type=float, default=1e-12,
-                        help="minimum value lambda is allowed to take")
-    parser.add_argument('--lambda_max', type=float, default=5.,
-                        help="maximum value lambda is allowed to take")
 
     # misc
     parser.add_argument('--word_vectors', type=str,
