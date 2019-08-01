@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-from latent_rationale.sst.models.attentionbaseline import AttentionBaseline
 from latent_rationale.sst.models.baseline import Baseline
 from latent_rationale.sst.models.rl import RLModel
 from latent_rationale.sst.models.latent import LatentRationaleModel
-from latent_rationale.sst.models.gumbel import GumbelModel
 
 
 def build_model(model_type, vocab, t2i, cfg):
@@ -39,8 +37,6 @@ def build_model(model_type, vocab, t2i, cfg):
             sparsity=sparsity, coherence=coherence)
     elif model_type == "latent":
         lambda_init = cfg["lambda_init"]
-        lambda_min = cfg["lambda_min"]
-        lambda_max = cfg["lambda_max"]
         lagrange_lr = cfg["lagrange_lr"]
         lagrange_alpha = cfg["lagrange_alpha"]
         return LatentRationaleModel(
@@ -50,7 +46,6 @@ def build_model(model_type, vocab, t2i, cfg):
             dependent_z=dependent_z,
             selection=selection, lasso=lasso,
             lambda_init=lambda_init,
-            lambda_min=lambda_min, lambda_max=lambda_max,
             lagrange_lr=lagrange_lr, lagrange_alpha=lagrange_alpha)
     else:
         raise ValueError("Unknown model")
