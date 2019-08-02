@@ -147,6 +147,12 @@ class LatentRationaleModel(nn.Module):
         l0 = pdf_nonzero.sum(1) / (lengths + 1e-9)  # [B]
         l0 = l0.sum() / batch_size
 
+        # `l0` now has the expected selection rate for this mini-batch
+        # we now follow the steps Algorithm 1 (page 7) of this paper:
+        # https://arxiv.org/abs/1810.00597
+        # to enforce the constraint that we want l0 to be not higher
+        # than `self.selection` (the target sparsity rate)
+
         # lagrange dissatisfaction, batch average of the constraint
         c0_hat = (l0 - self.selection)
 
