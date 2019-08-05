@@ -6,10 +6,6 @@ Rationales are trained jointly with classification, either with REINFORCE (for t
 
 If you use this code in your work, then please cite our paper [[bib]](https://www.aclweb.org/anthology/papers/P/P19/P19-1284.bib).
 
-# Notebooks
-
-We curate an updated HardKuma implementation at [https://github.com/probabll/sparse-distributions](https://github.com/probabll/sparse-distributions).
-You can also find other distributions there. 
 
 # Instructions
 
@@ -34,6 +30,14 @@ Finally, clone the repository:
 git clone https://github.com/joeynmt/joeynmt.git
 ```
 
+## Tensorboard
+
+You can folllow training progress for all experiments using tensorboard.
+Just point it to the directory of your experiment and open your browser:
+
+```
+tensorboard --logdir YOUR_EXPERIMENT_DIRECTORY --port 6006
+```
 
 ## Multi-aspect Sentiment Analysis (Beer Advocate)
 See [beer](latent_rationale/beer) directory.
@@ -51,7 +55,7 @@ python -m latent_rationale.beer.train \
     --model rl \
     --aspect 0 \
     --train_path data/beer/reviews.aspect0.train.txt.gz
-    --dev_path data/beer/reviews.aspect0.heldout.txt.gz  
+    --dev_path data/beer/reviews.aspect0.heldout.txt.gz
 ```
 
 To train on **all** aspects:
@@ -110,4 +114,8 @@ Lastly there is a recurrent baseline model as well:
 python -m latent_rationale.snli.train --save_path results/snli/rnn --model recurrent
 ```
 
+# Notebooks
+
+We curate an updated HardKuma implementation at [https://github.com/probabll/sparse-distributions](https://github.com/probabll/sparse-distributions).
+You can also find other distributions there. 
 
