@@ -48,7 +48,7 @@ There are three models that you can choose from using `--model`:
 3. `latent` (hardkuma)
 
 
-To train on a single aspect (as in Table 2), e.g. aspect 0 (look):
+To train a Bernoulli/RL model on a single aspect (as in Table 2), e.g. aspect 0 (look):
 
 ```
 python -m latent_rationale.beer.train \
@@ -56,6 +56,18 @@ python -m latent_rationale.beer.train \
     --aspect 0 \
     --train_path data/beer/reviews.aspect0.train.txt.gz
     --dev_path data/beer/reviews.aspect0.heldout.txt.gz
+    --scheduler multistep
+```
+
+To train a latent/HardKuma model on a single aspect (as in Table 2), e.g. aspect 0 (look):
+
+```
+python -m latent_rationale.beer.train \
+    --model latent \
+    --aspect 0 \
+    --train_path data/beer/reviews.aspect0.train.txt.gz
+    --dev_path data/beer/reviews.aspect0.heldout.txt.gz
+    --scheduler exponential
 ```
 
 To train on **all** aspects:
