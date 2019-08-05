@@ -27,7 +27,7 @@ pip install -r requirements.txt
 Finally, clone the repository:
 
 ```
-git clone https://github.com/joeynmt/joeynmt.git
+git clone https://github.com/bastings/interpretable_predictions.git
 ```
 
 ## Tensorboard
