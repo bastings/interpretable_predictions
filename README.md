@@ -107,13 +107,15 @@ python -m latent_rationale.beer.predict --ckpt path/to/model/directory
 To train the latent rationale model to select 30% of text:
 
 ```
-python -m latent_rationale.sst.train --model latent --selection 0.3 --save_path results/sst/latent_30pct
+python -m latent_rationale.sst.train \
+  --model latent --selection 0.3 --save_path results/sst/latent_30pct
 ```
 
 To train the Bernoulli (REINFORCE) model with L0 penalty weight 0.01:
 
 ```
-python -m latent_rationale.sst.train --model latent --sparsity 0.01 --save_path results/sst/bernoulli_sparsity01
+python -m latent_rationale.sst.train \
+  --model rl --sparsity 0.01 --save_path results/sst/bernoulli_sparsity01
 ```
 
 ## SNLI
