@@ -275,7 +275,7 @@ def get_args():
                         default="data/beer/annotations.json")
     parser.add_argument('--max_len', type=int, default=256,
                         help="maximum input length (cut off afterwards)")
-    parser.add_argument('--save_path', type=str, default='results')
+    parser.add_argument('--save_path', type=str, default='results/beer/default')
     parser.add_argument('--ckpt', type=str, default='',
                         help="resume training from given checkpoint")
 
@@ -288,7 +288,7 @@ def get_args():
     parser.add_argument('--hidden_size', type=int, default=200)
     parser.add_argument('--attention_size', type=int, default=100)
 
-    parser.add_argument('--print_every', type=int, default=10)
+    parser.add_argument('--print_every', type=int, default=50)
     parser.add_argument('--eval_every', type=int, default=-1)
 
     # optimization

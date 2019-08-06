@@ -59,6 +59,6 @@ class SimpleClassifier(nn.Module):
 
     def get_loss(self, prediction, targets, **kwargs):
         loss = self.criterion(prediction, targets)
-        mse = loss.sum(1).mean(0).item()
-        optional = dict(mse=mse)
-        return loss.mean(), optional
+        loss = loss.mean()
+        optional = dict(mse=loss.item())
+        return loss, optional

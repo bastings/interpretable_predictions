@@ -5,7 +5,7 @@ from latent_rationale.beer.models.latent import LatentRationaleModel
 from latent_rationale.beer.models.rl import RLModel
 
 
-def build_model(model_type, vocab, output_size=1, cfg=None):
+def build_model(model_type, vocab, cfg=None):
 
     aspect = cfg["aspect"]
     emb_size = cfg["emb_size"]
@@ -17,6 +17,8 @@ def build_model(model_type, vocab, output_size=1, cfg=None):
 
     if aspect > -1:
         output_size = 1
+    else:
+        output_size = 5
 
     if model_type == "baseline":
         return SimpleClassifier(

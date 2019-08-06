@@ -119,7 +119,7 @@ class LatentRationaleModel(nn.Module):
         loss_mat = self.criterion(preds, targets)  # [B, T]
 
         # main MSE loss for p(y | x,z)
-        loss_vec = loss_mat.sum(1)     # [B]
+        loss_vec = loss_mat.mean(1)   # [B]
         mse = loss_vec.mean()         # [1]
         optional["mse"] = mse.item()  # [1]
 
