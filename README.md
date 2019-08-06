@@ -64,7 +64,8 @@ python -m latent_rationale.beer.train \
     --train_path data/beer/reviews.aspect0.train.txt.gz \
     --dev_path data/beer/reviews.aspect0.heldout.txt.gz \
     --scheduler multistep \
-    --save_path results/beer/rl_a0
+    --save_path results/beer/rl_a0 \
+    --sparsity 0.0003 --coherence 2
 ```
 
 To train a latent/HardKuma model on a single aspect (as in Table 2), e.g. aspect 0 (look):
@@ -76,10 +77,11 @@ python -m latent_rationale.beer.train \
     --train_path data/beer/reviews.aspect0.train.txt.gz \
     --dev_path data/beer/reviews.aspect0.heldout.txt.gz \
     --scheduler exponential \
-    --save_path results/beer/latent_a0
+    --save_path results/beer/latent_a0 \
+    --selection 0.13 --lasso 0.02
 ```
 
-To train on **all** aspects:
+To train a baseline on **all** aspects:
 
 ```
 python -m latent_rationale.beer.train \
