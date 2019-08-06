@@ -61,9 +61,10 @@ To train a Bernoulli/RL model on a single aspect (as in Table 2), e.g. aspect 0 
 python -m latent_rationale.beer.train \
     --model rl \
     --aspect 0 \
-    --train_path data/beer/reviews.aspect0.train.txt.gz
-    --dev_path data/beer/reviews.aspect0.heldout.txt.gz
-    --scheduler multistep
+    --train_path data/beer/reviews.aspect0.train.txt.gz \
+    --dev_path data/beer/reviews.aspect0.heldout.txt.gz \
+    --scheduler multistep \
+    --save_path results/beer/rl_a0
 ```
 
 To train a latent/HardKuma model on a single aspect (as in Table 2), e.g. aspect 0 (look):
@@ -72,9 +73,10 @@ To train a latent/HardKuma model on a single aspect (as in Table 2), e.g. aspect
 python -m latent_rationale.beer.train \
     --model latent \
     --aspect 0 \
-    --train_path data/beer/reviews.aspect0.train.txt.gz
-    --dev_path data/beer/reviews.aspect0.heldout.txt.gz
-    --scheduler exponential
+    --train_path data/beer/reviews.aspect0.train.txt.gz \
+    --dev_path data/beer/reviews.aspect0.heldout.txt.gz \
+    --scheduler exponential \
+    --save_path results/beer/latent_a0
 ```
 
 To train on **all** aspects:
@@ -83,8 +85,9 @@ To train on **all** aspects:
 python -m latent_rationale.beer.train \
     --model baseline \
     --aspect -1 \
-    --train_path data/beer/reviews.260k.train.txt.gz
-    --dev_path data/beer/reviews.260k.heldout.txt.gz  
+    --train_path data/beer/reviews.260k.train.txt.gz \
+    --dev_path data/beer/reviews.260k.heldout.txt.gz \
+    --save_path results/beer/baseline_multi
 ```
 
 For help/more options:
