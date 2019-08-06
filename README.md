@@ -19,15 +19,22 @@ virtualenv --system-site-packages -p python3 ./my_venv
 source ./my_venv/bin/activate
 ```
 
-Then, install all required Python packages using:
+Install all required Python packages using:
 ```
 pip install -r requirements.txt
 ```
 
-Finally, clone the repository:
+Clone the repository:
 
 ```
 git clone https://github.com/bastings/interpretable_predictions.git
+```
+
+And finally download the data:
+
+```
+cd interpretable_predictions
+./download_data.sh
 ```
 
 ## Tensorboard
