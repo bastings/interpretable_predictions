@@ -58,8 +58,6 @@ def dump_rationales(model, data, path, device=None, batch_size=256):
                     for sample_id in range(z_samples.shape[0]):
 
                         z_sample = z_samples[sample_id]
-                        # z_sample = z_sample[None, :]
-
                         example = []
 
                         for ti, zi in zip(tokens, z_sample):
@@ -253,7 +251,7 @@ def evaluate_loss(model, data, batch_size=256, device=None, cfg=None):
     for k, v in total.items():
         if not k.startswith("z_num"):
             result[k] = v / float(total_examples)
-    
+
     if "z_num_1" in total:
         z_total = total["z_num_0"] + total["z_num_c"] + total["z_num_1"]
         selected = total["z_num_1"] / float(z_total)
