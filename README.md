@@ -65,6 +65,7 @@ python -m latent_rationale.beer.train \
     --dev_path data/beer/reviews.aspect0.heldout.txt.gz \
     --scheduler multistep \
     --save_path results/beer/rl_a0 \
+    --dependent-z \
     --sparsity 0.0003 --coherence 2
 ```
 
@@ -78,6 +79,7 @@ python -m latent_rationale.beer.train \
     --dev_path data/beer/reviews.aspect0.heldout.txt.gz \
     --scheduler exponential \
     --save_path results/beer/latent_a0 \
+    --dependent-z \
     --selection 0.13 --lasso 0.02
 ```
 
