@@ -338,6 +338,8 @@ def train():
                 with open(result_path, mode="w") as f:
                     json.dump(cfg, f)
 
+                # close Summary Writer
+                writer.close()
                 return
 
         epoch += 1
