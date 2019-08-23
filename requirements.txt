@@ -1,4 +1,4 @@
 tqdm
-torch>1.1
+torch>=1.2
 torchtext
 tensorflow>=1.14
