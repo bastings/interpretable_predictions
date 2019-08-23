@@ -293,11 +293,6 @@ def train():
                 print("Done training")
                 print("Last lr: ", cur_lr)
 
-                # export scalar data to JSON for external processing
-                writer.export_scalars_to_json(
-                    os.path.join(cfg["save_path"], "./all_scalars.json"))
-                writer.close()
-
                 # evaluate on test with best model
                 print("Loading best model")
                 path = os.path.join(cfg["save_path"], "model.pt")
