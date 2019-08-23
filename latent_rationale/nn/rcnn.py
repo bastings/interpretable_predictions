@@ -175,9 +175,13 @@ class RCNN(nn.Module):
                 "can only provide state for unidirectional RCNN"
 
             # backward pass
-            outputs_rev = RCNN._unroll(x.flip(1), self.cell_rev, mask.flip(1))
+            idx_rev = torch.arange(x.size(1) - 1, -1, -1)
+            mask_rev = mask[:, idx_rev]  # fix for pytorch 1.2
+            x_rev = x[:, idx_rev]
+            outputs_rev = RCNN._unroll(x_rev, self.cell_rev, mask_rev)
             final_rev = outputs_rev[:, -1, :].squeeze(1)
-            outputs_rev = outputs_rev.flip(1)
+            # outputs_rev = outputs_rev.flip(1)
+            outputs_rev = outputs_rev[:, idx_rev]  # back into original order
 
             # concatenate with forward pass
             final = torch.cat([final, final_rev], dim=-1)
