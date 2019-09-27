@@ -18,7 +18,7 @@ def predict():
     """
 
     predict_cfg = get_predict_args()
-    device = get_device(predict_cfg)
+    device = get_device()
     print(device)
 
     # load checkpoint
