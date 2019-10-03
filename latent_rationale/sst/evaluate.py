@@ -31,8 +31,8 @@ def get_histogram_counts(z=None, mask=None, mb=None):
     return counts
 
 
-def evaluate(model, data, batch_size=25, device=None):
-    """Accuracy of a model on given data set (using minibatches)"""
+def predict(model, data, batch_size=25, device=None):
+    """Accuracy of a model on given data set (using minibatches). Also returns the predictions."""
 
     model.eval()  # disable dropout
 
@@ -42,6 +42,7 @@ def evaluate(model, data, batch_size=25, device=None):
     histogram_totals = np.zeros(5).astype(np.int64)
     z_histogram_totals = np.zeros(5).astype(np.int64)
 
+    all_preds = []
     for mb in get_minibatch(data, batch_size=batch_size, shuffle=False):
         x, targets, reverse_map = prepare_minibatch(mb, model.vocab, device=device)
         mask = (x != 1)
@@ -83,6 +84,7 @@ def evaluate(model, data, batch_size=25, device=None):
         # add the number of correct predictions to the total correct
         totals['acc'] += (predictions == targets.view(-1)).sum().item()
         totals['total'] += batch_size
+        all_preds.extend(predictions.reshape(-1).numpy())
 
     result = {}
 
@@ -101,4 +103,9 @@ def evaluate(model, data, batch_size=25, device=None):
     if "p0" in result:
         result["selected"] = 1 - result["p0"]
 
+    return result, all_preds
+
+def evaluate(model, data, batch_size=25, device=None):
+    """Accuracy of a model on given data set (using minibatches). Does not return predictions."""
+    result, all_preds = predict(model, data, batch_size=batch_size, device=device)
     return result
