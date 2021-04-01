@@ -343,7 +343,7 @@ def get_args():
     # regularization for latent model
     parser.add_argument('--selection', type=float, default=1.,
                         help="select this ratio of input words "
-                             "(e.g. 0.13 for 13%)")
+                             "(e.g. 0.13 for 13%%)")
     parser.add_argument('--lasso', type=float, default=0.,
                         help="Fused lasso regularizer for Kuma mode"
                              "Note: this is the final weight, not a factor.")
