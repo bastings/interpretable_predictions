@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import numpy as np
 import torch
 from torch import nn
 from latent_rationale.common.util import get_z_stats
@@ -86,6 +87,8 @@ class LatentRationaleModel(nn.Module):
         self.register_buffer('lambda1', torch.full((1,), lambda_init))
         self.register_buffer('c0_ma', torch.full((1,), 0.))  # moving average
         self.register_buffer('c1_ma', torch.full((1,), 0.))  # moving average
+        self.register_buffer('c0_ma_eval', torch.full((1,), 0.))
+        self.register_buffer('c1_ma_eval', torch.full((1,), 0.))
 
     @property
     def z(self):
@@ -112,6 +115,30 @@ class LatentRationaleModel(nn.Module):
         y = self.classifier(x, mask, z)
 
         return y
+
+    def eval(self):
+        """
+        Override eval to additionally reset the moving averages
+        """
+        super(LatentRationaleModel, self).eval()
+        self.c0_ma_eval.fill_(0.)
+        self.c1_ma_eval.fill_(0.)
+
+    def update_lambda(self, i: int, ci: float):
+        assert i == 0 or i == 1
+        lambda_attr = f"lambda{i}"
+        lambda_i = getattr(self, lambda_attr)
+        lambda_i = lambda_i * np.exp(self.lagrange_lr * ci)
+        lambda_i = lambda_i.clamp(self.lambda_min, self.lambda_max)
+        setattr(self, lambda_attr, lambda_i)
+
+    def _update_ma(self, i: int, ci_hat: float):
+        assert i == 0 or i == 1
+        ma_attr = f"c{i}_ma" if self.training else f"c{i}_ma_eval"
+        ma = getattr(self, ma_attr)
+        ma = self.alpha * ma + (1-self.alpha) * ci_hat
+        setattr(self, ma_attr, ma)
+        return ma
 
     def get_loss(self, preds, targets, mask=None):
 
@@ -157,14 +184,14 @@ class LatentRationaleModel(nn.Module):
         c0_hat = (l0 - self.selection)
 
         # moving average of the constraint
-        self.c0_ma = self.alpha * self.c0_ma + (1-self.alpha) * c0_hat.item()
+        c0_ma = self._update_ma(0, c0_hat.item())
 
         # compute smoothed constraint (equals moving average c0_ma)
-        c0 = c0_hat + (self.c0_ma.detach() - c0_hat.detach())
+        c0 = c0_hat + (c0_ma.detach() - c0_hat.detach())
 
         # update lambda
-        self.lambda0 = self.lambda0 * torch.exp(self.lagrange_lr * c0.detach())
-        self.lambda0 = self.lambda0.clamp(self.lambda_min, self.lambda_max)
+        if self.training:
+            self.update_lambda(0, c0.item())
 
         with torch.no_grad():
             optional["cost0_l0"] = l0.item()
@@ -201,15 +228,14 @@ class LatentRationaleModel(nn.Module):
         c1_hat = (lasso_cost - target1)
 
         # update moving average
-        self.c1_ma = self.alpha * self.c1_ma + \
-            (1 - self.alpha) * c1_hat.detach()
+        c1_ma = self._update_ma(1, c1_hat.item())
 
         # compute smoothed constraint
-        c1 = c1_hat + (self.c1_ma.detach() - c1_hat.detach())
+        c1 = c1_hat + (c1_ma.detach() - c1_hat.detach())
 
         # update lambda
-        self.lambda1 = self.lambda1 * torch.exp(self.lagrange_lr * c1.detach())
-        self.lambda1 = self.lambda1.clamp(self.lambda_min, self.lambda_max)
+        if self.training:
+            self.update_lambda(1, c1.item())
 
         with torch.no_grad():
             optional["cost1_lasso"] = lasso_cost.item()
