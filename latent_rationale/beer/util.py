@@ -321,6 +321,8 @@ def get_args():
                         help="minimum value lambda is allowed to take")
     parser.add_argument('--lambda_max', type=float, default=5.,
                         help="maximum value lambda is allowed to take")
+    parser.add_argument('--lagrange_ratio_max', type=float, default=5.,
+                        help="maximum lagrange/mse ratio to clamp lambda to")
     parser.add_argument('--lagrange_lr', type=float, default=0.05,
                         help="learning rate for lagrange")
     parser.add_argument('--lagrange_alpha', type=float, default=0.5,
