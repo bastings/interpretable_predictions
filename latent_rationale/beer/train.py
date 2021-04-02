@@ -157,6 +157,9 @@ def train():
             optimizer.step()
             iter_i += 1
 
+            hit_bad_minima = \
+                loss_optional.get("selected", 1.) < cfg["selection_lb"]
+
             # print info
             if iter_i % print_every == 0:
 
@@ -183,7 +186,7 @@ def train():
             if iter_i % iters_per_epoch == 0:
 
                 cur_lr = scheduler.optimizer.param_groups[0]["lr"]
-                if cur_lr > cfg["min_lr"]:
+                if cur_lr > cfg["min_lr"] and not hit_bad_minima:
                     if isinstance(scheduler, MultiStepLR):
                         scheduler.step()
                     elif isinstance(scheduler, ExponentialLR):
@@ -282,7 +285,7 @@ def train():
 
                 # update lr scheduler
                 if isinstance(scheduler, ReduceLROnPlateau):
-                    if iter_i > 5 * iters_per_epoch:
+                    if iter_i > 5 * iters_per_epoch and not hit_bad_minima:
                         scheduler.step(compare_obj)
 
             # done training

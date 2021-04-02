@@ -298,6 +298,8 @@ def get_args():
     parser.add_argument('--lr', type=float, default=0.0004)
     parser.add_argument('--min_lr', type=float, default=5e-5)
     parser.add_argument('--lr_decay', type=float, default=0.97)
+    parser.add_argument('--selection_lb', type=float,
+                        help="stop lr-decay when selection drops too low")
     parser.add_argument('--scheduler',
                         choices=["plateau", "multistep", "exponential"],
                         default="exponential")
@@ -349,4 +351,7 @@ def get_args():
                              "Note: this is the final weight, not a factor.")
 
     args = parser.parse_args()
+    if args.selection_lb is None:
+        # should at least select 2 tokens
+        args.selection_lb = 2. / args.max_len
     return args
