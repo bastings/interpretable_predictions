@@ -4,7 +4,7 @@ This is the repository for [Interpretable Neural Predictions with Differentiable
 The models in this repository learn to select a rationale, a portion of the input text, serving as an explanation of what is important for classification.
 Rationales are trained jointly with classification, either with REINFORCE (for the Lei et al. method), or simply using backpropagation (for our method using the HardKuma distribution). 
 
-If you use this code in your work, then please cite our paper [[bib]](https://www.aclweb.org/anthology/papers/P/P19/P19-1284.bib).
+If you use this code in your work, then please cite our paper [[bib]](https://www.aclweb.org/anthology/P19-1284.bib)
 
 
 # Instructions
