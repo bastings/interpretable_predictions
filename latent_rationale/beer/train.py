@@ -120,6 +120,7 @@ def train():
     iter_i = 0
     epoch = 0
     best_eval = 1e12
+    best_lambdas = (cfg["lambda_init"], cfg["lambda_init"])
     best_iter = 0
     pad_idx = vocab.w2i[PAD_TOKEN]
 
@@ -129,6 +130,7 @@ def train():
         ckpt = torch.load(cfg["ckpt"])
         model.load_state_dict(ckpt["state_dict"])
         best_iter = ckpt["best_iter"]
+        best_lambdas = ckpt["best_lambdas"]
         best_eval = ckpt["best_eval"]
         iter_i = ckpt["best_iter"]
         optimizer.load_state_dict(ckpt["optimizer_state_dict"])
@@ -251,14 +253,16 @@ def train():
                 print(str(datetime.datetime.now()))
 
                 # save best model parameters (lower is better)
-                compare_obj = dev_eval["obj"] if "obj" in dev_eval \
-                    else dev_eval["loss"]
+                compare_obj = dev_eval["mse"] \
+                            + best_lambdas[0] * dev_eval["c0"] \
+                            + best_lambdas[1] * dev_eval["c1"]
                 dynamic_threshold = best_eval * (1 - cfg["threshold"])
                 # only update after first 5 epochs (for stability)
                 if compare_obj < dynamic_threshold \
                         and iter_i > 5 * iters_per_epoch:
-                    print("new highscore", compare_obj)
-                    best_eval = compare_obj
+                    print("new high score:", compare_obj)
+                    best_eval = dev_eval["loss"]
+                    best_lambdas = (dev_eval["lambda0"], dev_eval["lambda1"])
                     best_iter = iter_i
                     if not os.path.exists(cfg["save_path"]):
                         os.makedirs(cfg["save_path"])
@@ -273,6 +277,7 @@ def train():
                         "state_dict": model.state_dict(),
                         "cfg": cfg,
                         "best_eval": best_eval,
+                        "best_lambdas": best_lambdas,
                         "best_iter": best_iter,
                         "optimizer_state_dict": optimizer.state_dict()
                     }
